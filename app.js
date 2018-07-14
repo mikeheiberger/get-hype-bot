@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const winston = require('winston');
-const auth = require('./auth.json');
+const { prefix, token } = require('./config.json');
 
 const logger = winston.createLogger({
     transports: [
@@ -16,17 +16,19 @@ client.on('ready', () => {
     logger.info(`Connected! Logged in as: ${client.user.tag}`);
 });
 
-client.on('message', msg => {
-    if (msg.content.substring(0, 1) === '!') {
-        let args = msg.content.substring(1).split(' ');
-        const cmd = args[0];
+client.on('message', message => {
+    if (!message.content.startsWith(prefix) || message.author.bot) 
+        return;
 
-        switch(cmd) {
-            case 'ping':
-                msg.reply('pong');
-            break;
-        }
+    const args = message.content.slice(prefix.length).split(/ +/);
+    const command = args.shift().toLowerCase();
+
+    if (message.content === `${prefix}ping`) {
+        message.channel.send('Pong!');
+    }
+    else if (message.content === `${prefix}server`) {
+        message.channel.send(`This server's name is: ${message.guild.name}`);
     }
 });
 
-client.login(auth.token);
+client.login(token);
