@@ -1,3 +1,5 @@
+const ytdl = require('ytdl-core');
+
 module.exports = {
     name: 'join',
     description: 'Makes the bot join your current voice channel',
@@ -7,7 +9,8 @@ module.exports = {
         if (message.member.voiceChannel) {
             message.member.voiceChannel.join()
                 .then(connection => {
-                    const dispatcher = connection.playFile('C:/Users/Michael/Documents/CHVRCHES - The Bones of What You Believe [Deluxe Version] (2013)/01 The Mother We Share.mp3');
+                    const stream = ytdl('https://www.youtube.com/watch?v=Hy8kmNEo1i8', { format: 'audioonly' });
+                    const dispatcher = connection.playStream(stream);
 
                     dispatcher.on('error', err => {
                         console.log(`Error playing file: ${err}`);
