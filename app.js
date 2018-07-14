@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const winston = require('winston');
-const { prefix, token } = require('./config.json');
+const { prefix, token, sounds } = require('./config.json');
 
 const logger = winston.createLogger({
     transports: [
@@ -28,6 +28,33 @@ client.on('message', message => {
     }
     else if (message.content === `${prefix}server`) {
         message.channel.send(`This server's name is: ${message.guild.name}`);
+    }
+    else if (message.content == `${prefix}join`) {
+        if (!message.guild) return;
+
+        if (message.member.voiceChannel) {
+            message.member.voiceChannel.join()
+                .then(connection => {
+                    logger.info(`Joined voice channel: ${message.member.voiceChannel.name}`);
+
+                    const dispatcher = connection.playFile(sounds[0]);
+
+                    dispatcher.on('error', err => {
+                        logger.info(`Error playing file: ${err}`);
+                    })
+
+                    dispatcher.setVolume(0.1);
+                    dispatcher.resume();
+                })
+                .catch(logger.error);
+        } else {
+            message.channel.send('You need to join a voice channel first');
+        }
+    }
+    else if (message.content == `${prefix}leave`) {
+        if (message.member.voiceChannel) {
+            message.member.voiceChannel.leave();
+        }
     }
 });
 
