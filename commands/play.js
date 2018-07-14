@@ -2,15 +2,20 @@ const ytdl = require('ytdl-core');
 const sounds = require('../sounds.json');
 
 module.exports = {
-    name: 'join',
-    description: 'Makes the bot join your current voice channel',
+    name: 'play',
+    description: "Play's the audio clip specified in the arguments",
     execute(message, args) {
         if (!message.guild) return;
 
         if (message.member.voiceChannel) {
             message.member.voiceChannel.join()
                 .then(connection => {
-                    const stream = ytdl(sounds["scatman"], { format: 'audioonly' });
+                    const songname = args[0];
+                    const link = sounds[songname].link;
+                    const start = sounds[songname].start;
+                    console.log(start);
+
+                    const stream = ytdl(link, { format: 'audioonly', begin: start });
                     const dispatcher = connection.playStream(stream);
 
                     dispatcher.on('error', err => {
