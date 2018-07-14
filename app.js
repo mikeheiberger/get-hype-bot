@@ -12,6 +12,8 @@ const logger = winston.createLogger({
     ]
 });
 
+let dispatcher;
+
 client.on('ready', () => {
     logger.info(`Connected! Logged in as: ${client.user.tag}`);
 });
@@ -23,13 +25,13 @@ client.on('message', message => {
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
-    if (message.content === `${prefix}ping`) {
+    if (command === `ping`) {
         message.channel.send('Pong!');
     }
-    else if (message.content === `${prefix}server`) {
+    else if (command === `server`) {
         message.channel.send(`This server's name is: ${message.guild.name}`);
     }
-    else if (message.content == `${prefix}join`) {
+    else if (command === `join`) {
         if (!message.guild) return;
 
         if (message.member.voiceChannel) {
@@ -37,7 +39,7 @@ client.on('message', message => {
                 .then(connection => {
                     logger.info(`Joined voice channel: ${message.member.voiceChannel.name}`);
 
-                    const dispatcher = connection.playFile(sounds[0]);
+                    dispatcher = connection.playFile(sounds[0]);
 
                     dispatcher.on('error', err => {
                         logger.info(`Error playing file: ${err}`);
@@ -51,9 +53,33 @@ client.on('message', message => {
             message.channel.send('You need to join a voice channel first');
         }
     }
-    else if (message.content == `${prefix}leave`) {
-        if (message.member.voiceChannel) {
-            message.member.voiceChannel.leave();
+    else if (command === `leave`) {
+        if (message.member) {
+            const guildID = message.member.guild.id;
+            logger.info(`Guild to leave: ${guildID}`);
+
+            const allVCIDs = client.voiceConnections.keys();
+            for (const key of allVCIDs) {
+                logger.info(`Voice Connection key: ${key}`);
+            };
+
+            const clientIsInChannel = client.voiceConnections.has(guildID);
+            logger.info(`Client in channel: ${clientIsInChannel}`);
+
+            if (clientIsInChannel) {
+                const channelToLeave = client.voiceConnections.get(guildID);
+                channelToLeave.channel.leave();
+            }
+        }
+    }
+    else if (command === `play`) {
+        if (dispatcher) {
+            dispatcher.resume();
+        }
+    }
+    else if (command === 'stop') {
+        if (dispatcher) {
+            dispatcher.pause();
         }
     }
 });
