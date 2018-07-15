@@ -10,7 +10,7 @@ module.exports = {
         if (message.member.voiceChannel) {
             message.member.voiceChannel.join()
                 .then(connection => {
-                    const stream = ytdl(sounds["scatman"], { format: 'audioonly' });
+                    const stream = ytdl(sounds["scatman"].link, { format: 'audioonly' });
                     const dispatcher = connection.playStream(stream);
 
                     dispatcher.on('error', err => {

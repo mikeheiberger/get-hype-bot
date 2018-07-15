@@ -11,19 +11,13 @@ module.exports = {
             message.member.voiceChannel.join()
                 .then(connection => {
                     const songname = args[0];
-                    const link = sounds[songname].link;
-                    const start = sounds[songname].start;
-                    console.log(start);
 
-                    const stream = ytdl(link, { format: 'audioonly', begin: start });
+                    const stream = ytdl(sounds[songname].link, { format: 'audioonly' });
                     const dispatcher = connection.playStream(stream);
 
                     dispatcher.on('error', err => {
                         console.log(`Error playing file: ${err}`);
                     })
-
-                    dispatcher.setVolume(0.1);
-                    dispatcher.resume();
                 })
                 .catch(console.error);
         } else {
