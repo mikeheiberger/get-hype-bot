@@ -4,6 +4,7 @@ const sounds = require('../sounds.json');
 module.exports = {
     name: 'play',
     description: "Play's the audio clip specified in the arguments",
+    cooldown: 30,
     execute(message, args) {
         if (!message.guild) return;
 
@@ -12,12 +13,19 @@ module.exports = {
                 .then(connection => {
                     const songname = args[0];
 
-                    const stream = ytdl(sounds[songname].link, { format: 'audioonly' });
+                    const stream = ytdl(sounds[songname].link, { format: 'audioonly', begin: sounds[songname].start });                   
                     const dispatcher = connection.playStream(stream);
 
                     dispatcher.on('error', err => {
                         console.log(`Error playing file: ${err}`);
                     })
+
+                    dispatcher.setVolume(0.4);
+                    dispatcher.resume();
+
+                    if (sounds[songname].duration) {
+                        setTimeout(() => dispatcher.pause(), sounds[songname].duration * 1000);
+                    }
                 })
                 .catch(console.error);
         } else {

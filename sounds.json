@@ -1,6 +1,7 @@
 {
     "scatman" : {
-        "link": "https://www.youtube.com/watch?v=Hy8kmNEo1i8"
+        "link": "https://www.youtube.com/watch?v=Hy8kmNEo1i8",
+        "duration": 15
     },
     "scatmansworld" : {
         "link": "https://www.youtube.com/watch?v=02vDkMEdIkY",
@@ -8,5 +9,23 @@
     },
     "hype" : {
         "link": "https://www.youtube.com/watch?v=ah4VQXe8YqU"
+    },
+    "AHHH" : {
+        "link": "https://www.youtube.com/watch?v=yBLdQ1a4-JI"
+    },
+    "bag" : {
+        "link": "https://www.youtube.com/watch?v=kFDlxrHNsic",
+        "start": "11s"
+    },
+    "sadhorn" : {
+        "link" : "https://www.youtube.com/watch?v=9Jz1TjCphXE"
+    },
+    "goddamn" : {
+        "link" : "https://www.youtube.com/watch?v=PTqtrGBYpxQ"
+    },
+    "dududu" : {
+        "link" : "https://youtu.be/E4_mORQrsPY",
+        "start" : "30s",
+        "duration" : 7
     }
 }
