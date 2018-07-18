@@ -26,6 +26,10 @@ module.exports = {
                     if (sounds[songname].duration) {
                         setTimeout(() => dispatcher.pause(), sounds[songname].duration * 1000);
                     }
+
+                    if (sounds[songname].volume) {
+                        dispatcher.setVolume(sounds[songname].volume);
+                    }
                 })
                 .catch(console.error);
         } else {
