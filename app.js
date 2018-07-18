@@ -50,7 +50,7 @@ client.on('ready', () => {
     Tags.sync();
 });
 
-client.on('message', message => {
+client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) 
         return;
 
