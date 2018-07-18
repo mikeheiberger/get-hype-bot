@@ -24,7 +24,7 @@ module.exports = {
                     dispatcher.resume();
 
                     if (sounds[songname].duration) {
-                        setTimeout(() => dispatcher.pause(), sounds[songname].duration * 1000);
+                        setTimeout(() => dispatcher.end(), sounds[songname].duration * 1000);
                     }
 
                     if (sounds[songname].volume) {
