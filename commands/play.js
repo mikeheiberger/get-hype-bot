@@ -8,12 +8,17 @@ module.exports = {
     execute(message, args) {
         if (!message.guild) return;
 
+        if (!args) return;
+
+        const songname = args[0];
+
+        const song = sounds[songname];
+        if (!song || !song.link) return;
+
         if (message.member.voiceChannel) {
             message.member.voiceChannel.join()
                 .then(connection => {
-                    const songname = args[0];
-
-                    const stream = ytdl(sounds[songname].link, { format: 'audioonly', begin: sounds[songname].start });                   
+                    const stream = ytdl(song.link, { format: 'audioonly', begin: song.start });                   
                     const dispatcher = connection.playStream(stream);
 
                     dispatcher.on('error', err => {
@@ -23,11 +28,11 @@ module.exports = {
                     dispatcher.setVolume(0.4);
                     dispatcher.resume();
 
-                    if (sounds[songname].duration) {
-                        setTimeout(() => dispatcher.end(), sounds[songname].duration * 1000);
+                    if (song.duration) {
+                        setTimeout(() => dispatcher.end(), song.duration * 1000);
                     }
 
-                    if (sounds[songname].volume) {
+                    if (song.volume) {
                         dispatcher.setVolume(sounds[songname].volume);
                     }
                 })

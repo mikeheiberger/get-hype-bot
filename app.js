@@ -54,8 +54,10 @@ client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) 
         return;
 
-    const args = message.content.slice(prefix.length).split(/ +/);
-    const commandName = args.shift().toLowerCase();
+    const messageContent = message.content.toLowerCase();
+
+    const args = messageContent.slice(prefix.length).split(/ +/);
+    const commandName = args.shift();
 
     if (!client.commands.has(commandName)) {
         if (commandName === 'addtag') {
