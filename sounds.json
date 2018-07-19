@@ -30,8 +30,15 @@
         "duration" : 7
     },
     "tryin" : {
-        "link" : "https://www.youtube.com/watch?v=19NmkLltBng",
-        "start" : "58s",
+        "link" : "https://www.youtube.com/watch?v=hMgHZ5dy918",
+        "start" : "54s800ms",
+        "duration" : 2,
         "volume" : 1
+    },
+    "werewolf" : {
+        "link" : "https://www.youtube.com/watch?v=6gCj62KHG0g",
+        "start" : "10s",
+        "duration" : 7
+
     }
 }
