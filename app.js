@@ -1,4 +1,5 @@
 const fs = require('fs');
+const util = require('util');
 const Sequelize = require('sequelize');
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -33,7 +34,7 @@ const Tags = sequelize.define('tags', {
         type: Sequelize.STRING,
         unique: true,
     },
-    descrption: Sequelize.TEXT,
+    description: Sequelize.TEXT,
     username: Sequelize.STRING,
     usage_count: {
         type: Sequelize.INTEGER,
@@ -46,8 +47,9 @@ const cooldowns = new Discord.Collection();
 const defaultCooldownSecs = 3;
 
 client.on('ready', () => {
+    
     console.log(`Connected! Logged in as: ${client.user.tag}`);
-    Tags.sync();
+    Tags.sync({ force: true });
 });
 
 client.on('message', async message => {
@@ -61,37 +63,42 @@ client.on('message', async message => {
 
     if (!client.commands.has(commandName)) {
         if (commandName === 'addtag') {
-            const splitArgs = args.split(' ');
-            const tagName = splitArgs.shift();
-            const tagDesc = splitArgs.join(' ');
+            const tagName = args.shift();
+            const tagDesc = args.join(' ');
 
             try {
                 // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
                 const tag = await Tags.create({
                     name: tagName,
-                    descrption: tagDesc,
+                    description: tagDesc,
                     username: message.author.username
                 });
                 return message.reply(`Tag ${tag.name} added`);
             }
             catch (e) {
                 if (e.name === 'SequelizeUniqueConstraintError') {
-                    return message.reply('That tag already exists');
+                    return message.reply('that tag already exists');
                 }
-                return message.reply('Something went wrong with adding a tag.');
+                console.log(util.inspect(e, false, null));
+                return message.reply('something went wrong with adding a tag.');
             }
         }
         else if (commandName === 'tag') {
-            const tagName = args;
-
-            // equivalent to: SELECT * FROM tags WHERE name = 'tagName' LIMIT 1;
-            const tag = await Tags.findOne({ where: { name: tagName } });
-            if (tag) {
-                // equivalent to: UPDATE tags SET usage_count = usage_count + 1 WHERE name = 'tagName';
-                tag.increment('usage_count');
-                return message.channel.send(tag.get('description'));
+            try {
+                const tagName = args.shift();
+                
+                // equivalent to: SELECT * FROM tags WHERE name = 'tagName' LIMIT 1;
+                const tag = await Tags.findOne({ where: { name: tagName } });
+                if (tag) {
+                    // equivalent to: UPDATE tags SET usage_count = usage_count + 1 WHERE name = 'tagName';
+                    tag.increment('usage_count');
+                    return message.channel.send(tag.get('description'));
+                }
+                return message.reply(`could not find tag: ${tagName}`);
             }
-            return message.reply(`Could not find tag: ${tagName}`);
+            catch (e) {
+                return message.reply('something when wrong with finding the tag');
+            }
         }
         else if (commandName === 'edittag') {
 
