@@ -4,6 +4,8 @@ let dispatcher;
 
 module.exports = {
     playStream(connection, song) {
+        this.stop();
+
         const stream = ytdl(song.link,  { format: 'audioonly', begin: song.start });
         dispatcher = connection.playStream(stream);
         
@@ -15,10 +17,29 @@ module.exports = {
         dispatcher.resume();
 
         if (song.duration) {
-            setTimeout(() => dispatcher.end(), song.duration * 1000);
+            setTimeout(() => this.stop(), song.duration * 1000);
         }
     },
+
     setVolume(volume) {
         dispatcher.setVolume(volume);
+    },
+
+    pause() {
+        if (dispatcher) {
+            dispatcher.pause();
+        }
+    },
+
+    resume() {
+        if (dispatcher) {
+            dispatcher.resume();
+        }
+    },
+
+    stop() {
+        if (dispatcher) {
+            dispatcher.end();
+        }
     }
 }

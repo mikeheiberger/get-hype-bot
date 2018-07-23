@@ -180,7 +180,7 @@ client.on('message', async message => {
         } else {
             const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
             
-            if (now < expirationTime) {
+            if (now < expirationTime && !process.env.DEBUG) {
                 const timeLeft = (expirationTime - now) / 1000;
                 return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before trying the \`${command.name}\` command again.`);
             }
