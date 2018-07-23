@@ -1,4 +1,5 @@
 const audioManager = require('../managers/audioManager');
+const sounds = require('../sounds.json');
 
 module.exports = {
     name: 'play',
@@ -16,15 +17,10 @@ module.exports = {
 
         if (message.member.voiceChannel) {
             message.member.voiceChannel.join()
-                .then(connection => {
-                    audioManager.playStream(connection);
-                    if (song.duration) {
-                        setTimeout(() => dispatcher.end(), song.duration * 1000);
-                    }
-                })
+                .then(connection => audioManager.playStream(connection, song))
                 .catch(console.error);
         } else {
-            message.channel.send('You need to join a voice channel first');
+            message.channel.reply('you need to join a voice channel first');
         }
     }
 }

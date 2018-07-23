@@ -1,21 +1,24 @@
 const ytdl = require('ytdl-core');
-const sounds = require('../sounds.json');
 
-let currentDispatcher;
+let dispatcher;
 
 module.exports = {
-    playStream(connection, songLink) {
-        const stream = ytdl(songLink,  { format: 'audioonly', begin: song.start });
-        currentDispatcher = connection.playStream(stream);
+    playStream(connection, song) {
+        const stream = ytdl(song.link,  { format: 'audioonly', begin: song.start });
+        dispatcher = connection.playStream(stream);
         
         dispatcher.on('error', err => {
             console.log(`Error playing file: ${err}`);
         })
 
-        dispatcher.setVolume(0.4);
+        dispatcher.setVolume(song.volume || 0.4);
         dispatcher.resume();
+
+        if (song.duration) {
+            setTimeout(() => dispatcher.end(), song.duration * 1000);
+        }
     },
     setVolume(volume) {
-        currentDispatcher.setVolume(volume);
+        dispatcher.setVolume(volume);
     }
 }
