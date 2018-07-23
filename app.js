@@ -42,6 +42,8 @@ for (const file of commandFiles) {
 //         allowNull: false
 //     }
 // });
+process.on('unhandledRejection', error => console.error(`Uncaught Promise Rejection:\n${error}`));
+
 
 const cooldowns = new Discord.Collection();
 
