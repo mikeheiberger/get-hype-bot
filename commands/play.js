@@ -5,6 +5,8 @@ module.exports = {
     name: 'play',
     description: "Play's the audio clip specified in the arguments",
     cooldown: 30,
+    args: true,
+    usage: '<songname>',
     execute(message, args) {
         if (!message.guild) return;
 

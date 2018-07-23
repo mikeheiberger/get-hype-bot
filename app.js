@@ -3,7 +3,7 @@ const util = require('util');
 const Sequelize = require('sequelize');
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const { prefix } = require('./config.json');
+const { prefix, default_cd } = require('./config.json');
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -44,7 +44,6 @@ for (const file of commandFiles) {
 // });
 
 const cooldowns = new Discord.Collection();
-const defaultCooldownSecs = 3;
 
 client.on('ready', () => {
     console.log(`Connected! Logged in as: ${client.user.tag}`);
@@ -137,7 +136,6 @@ client.on('message', async message => {
         }
     }
     else {
-
         const command = client.commands.get(commandName);
         
         // Check for required command roles
@@ -172,7 +170,7 @@ client.on('message', async message => {
         
         const now = Date.now();
         const timestamps = cooldowns.get(command.name);
-        const cooldownAmount = (command.cooldown || defaultCooldownSecs) * 1000;
+        const cooldownAmount = (command.cooldown || default_cd) * 1000;
         
         if (!timestamps.has(message.author.id)) {
             timestamps.set(message.author.id, now);
