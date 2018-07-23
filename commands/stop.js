@@ -1,9 +1,9 @@
 const audioManager = require('../managers/audioManager');
 
 module.exports = {
-    name: 'pause',
-    description: 'Pauses the current sound',
+    name: 'stop',
+    description: 'Ends the current sound',
     execute(message, args) {
-        audioManager.pause();
+        audioManager.stop();
     }
 }

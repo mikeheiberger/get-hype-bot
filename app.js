@@ -1,8 +1,7 @@
 const fs = require('fs');
-const Sequelize = require('sequelize');
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const { prefix, token } = require('./config.json');
+const { prefix } = require('./config.json');
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -11,43 +10,11 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);    
 }
 
-const sequelize = new Sequelize('database', 'user', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    logging: false,
-    operatorsAliases: false,
-    //SQLite only
-    storage: 'database.sqlite'
-});
-
-/*
-* equivalent to: CREATE TABLE tags(
-* name VARCHAR(255)
-* description TEXT,
-* username VARCHAR(255)
-* usage INT
-* );
-*/
-const Tags = sequelize.define('tags', {
-    name: {
-        type: Sequelize.STRING,
-        unique: true,
-    },
-    descrption: Sequelize.TEXT,
-    username: Sequelize.STRING,
-    usage_count: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-        allowNull: false
-    }
-});
-
 const cooldowns = new Discord.Collection();
 const defaultCooldownSecs = 3;
 
 client.on('ready', () => {
     console.log(`Connected! Logged in as: ${client.user.tag}`);
-    Tags.sync();
 });
 
 client.on('message', async message => {
@@ -102,7 +69,7 @@ client.on('message', async message => {
         } else {
             const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
             
-            if (now < expirationTime) {
+            if (now < expirationTime && !process.env.DEBUG) {
                 const timeLeft = (expirationTime - now) / 1000;
                 return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before trying the \`${command.name}\` command again.`);
             }
