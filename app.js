@@ -12,14 +12,14 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);    
 }
 
-const sequelize = new Sequelize('database', 'user', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    logging: false,
-    operatorsAliases: false,
-    //SQLite only
-    storage: 'database.sqlite'
-});
+// const sequelize = new Sequelize('database', 'user', 'password', {
+//     host: 'localhost',
+//     dialect: 'sqlite',
+//     logging: false,
+//     operatorsAliases: false,
+//     //SQLite only
+//     storage: 'database.sqlite'
+// });
 
 /*
 * equivalent to: CREATE TABLE tags(
@@ -29,27 +29,26 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 * usage INT
 * );
 */
-const Tags = sequelize.define('tags', {
-    name: {
-        type: Sequelize.STRING,
-        unique: true,
-    },
-    description: Sequelize.TEXT,
-    username: Sequelize.STRING,
-    usage_count: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-        allowNull: false
-    }
-});
+// const Tags = sequelize.define('tags', {
+//     name: {
+//         type: Sequelize.STRING,
+//         unique: true,
+//     },
+//     description: Sequelize.TEXT,
+//     username: Sequelize.STRING,
+//     usage_count: {
+//         type: Sequelize.INTEGER,
+//         defaultValue: 0,
+//         allowNull: false
+//     }
+// });
 
 const cooldowns = new Discord.Collection();
 const defaultCooldownSecs = 3;
 
 client.on('ready', () => {
-    
     console.log(`Connected! Logged in as: ${client.user.tag}`);
-    Tags.sync({ force: true });
+    // Tags.sync();
 });
 
 client.on('message', async message => {
@@ -101,16 +100,40 @@ client.on('message', async message => {
             }
         }
         else if (commandName === 'edittag') {
+            const tagName = args.shift();
+            const tagDesc = args.join(' ');
 
+            // equivalent to UPDATE tags (description) values (?) WHERE name='?';
+            const affectedRows = await Tags.update({ description: tagDesc }, { where: { name: tagName } });
+            if (affectedRows > 0) {
+                return message.reply(`tag ${tagName} was edited`);
+            }
+            return message.reply(`could not find a tag with name ${tagName}`);
         }
         else if (commandName === 'taginfo') {
+            const tagName = args;
 
+            // equivalent to: SELECT * FROM tags WHERE name = 'tagName' LIMIT 1;
+            const tag = await Tags.findOne({ where: { name: tagName } });
+            if (tag) {
+                return message.channel.send(`${tagName} was created by ${tag.username} at ${tag.createdAt} and has been used ${tag.usage_count} times.`);
+            }
+            return message.reply(`could not find tag: ${tagName}`);
         }
         else if (commandName === 'showtags') {
-
+            // equivalent to: SELECT name FROM tags;
+            const tagList = await Tags.findAll({ attributes: ['name'] });
+            const tagString = tagList.map(t => t.name).join(', ') || 'No tags set.';
+            return message.channel.send(`List of tags: ${tagString}`);
         }
         else if (commandName === 'removetag') {
+            const tagName = args;
 
+            // equivalent to: DELETE from tags WHERE name = ?;
+            const rowCount = await Tags.destroy({ where: { name: tagName } });
+            if (!rowCount) return message.reply('that tag does not exist');
+
+            return message.reply(`${tagName} deleted`);
         }
     }
     else {
