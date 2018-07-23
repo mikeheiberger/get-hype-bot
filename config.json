@@ -1,4 +1,5 @@
 {
-    "prefix": "!"
+    "prefix": "!",
+    "default_cd": 3
 }
 
