@@ -59,55 +59,7 @@ client.on('message', async message => {
     const args = messageContent.slice(prefix.length).split(/ +/);
     const commandName = args.shift();
 
-    if (!client.commands.has(commandName)) {
-        if (commandName === 'addtag') {
-            const splitArgs = args.split(' ');
-            const tagName = splitArgs.shift();
-            const tagDesc = splitArgs.join(' ');
-
-            try {
-                // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-                const tag = await Tags.create({
-                    name: tagName,
-                    descrption: tagDesc,
-                    username: message.author.username
-                });
-                return message.reply(`Tag ${tag.name} added`);
-            }
-            catch (e) {
-                if (e.name === 'SequelizeUniqueConstraintError') {
-                    return message.reply('That tag already exists');
-                }
-                return message.reply('Something went wrong with adding a tag.');
-            }
-        }
-        else if (commandName === 'tag') {
-            const tagName = args;
-
-            // equivalent to: SELECT * FROM tags WHERE name = 'tagName' LIMIT 1;
-            const tag = await Tags.findOne({ where: { name: tagName } });
-            if (tag) {
-                // equivalent to: UPDATE tags SET usage_count = usage_count + 1 WHERE name = 'tagName';
-                tag.increment('usage_count');
-                return message.channel.send(tag.get('description'));
-            }
-            return message.reply(`Could not find tag: ${tagName}`);
-        }
-        else if (commandName === 'edittag') {
-
-        }
-        else if (commandName === 'taginfo') {
-
-        }
-        else if (commandName === 'showtags') {
-
-        }
-        else if (commandName === 'removetag') {
-
-        }
-    }
-    else {
-
+    if (client.commands.has(commandName)) {
         const command = client.commands.get(commandName);
         
         // Check for required command roles
