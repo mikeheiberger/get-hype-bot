@@ -1,6 +1,6 @@
 module.exports = {
     name: "prune",
-    description: "Deletes a number of the provided user's messages",
+    description: "Deletes the provided number of the messages from the current channel",
     args: true,
     usage: '<number>',
     cooldown: 10,
