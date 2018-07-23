@@ -1,5 +1,4 @@
-const ytdl = require('ytdl-core');
-const sounds = require('../sounds.json');
+const audioManager = require('../managers/audioManager');
 
 module.exports = {
     name: 'play',
@@ -18,22 +17,9 @@ module.exports = {
         if (message.member.voiceChannel) {
             message.member.voiceChannel.join()
                 .then(connection => {
-                    const stream = ytdl(song.link, { format: 'audioonly', begin: song.start });                   
-                    const dispatcher = connection.playStream(stream);
-
-                    dispatcher.on('error', err => {
-                        console.log(`Error playing file: ${err}`);
-                    })
-
-                    dispatcher.setVolume(0.4);
-                    dispatcher.resume();
-
+                    audioManager.playStream(connection);
                     if (song.duration) {
                         setTimeout(() => dispatcher.end(), song.duration * 1000);
-                    }
-
-                    if (song.volume) {
-                        dispatcher.setVolume(sounds[songname].volume);
                     }
                 })
                 .catch(console.error);
