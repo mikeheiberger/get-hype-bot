@@ -1,11 +1,7 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('database', 'username', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    logging: false,
-    operatorsAliases: false,
-    storage: 'database.sqlite'
+const sequelize = new Sequelize('postgres://postgres:miy@motoS120@localhost:5432/get-hype-bot', {
+    dialect: 'postgres'
 });
 
 const CurrencyShop = sequelize.import('models/currencyShop');
