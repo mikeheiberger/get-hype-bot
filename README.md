@@ -10,6 +10,7 @@ Future Enhancements:
   <li> Cache downloaded data so we don't have to hit youtube and rip the audio every time
   <li> Create a local cache to reduce database reads when playing a song (since this will be done far more often than adding a song)
   <li> Enhance permissions so only the users who added the song, or other specified roles, can update or remove a song
+  <li> Add unit testing
 </ul>
 
 This is a work in progress, and my first real foray into Node.js programming and Discord bots.
