@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         volume: {
-            type: DataTypes.RANGE(DataTypes.INTEGER),
+            type: DataTypes.INTEGER,
             default: 1,
         }
     });

@@ -16,7 +16,7 @@ module.exports = {
         dispatcher.setVolume(song.volume || 0.4);
         dispatcher.resume();
 
-        if (song.duration) {
+        if (song.duration && song.duration > 0) {
             setTimeout(() => this.stop(), song.duration * 1000);
         }
     },

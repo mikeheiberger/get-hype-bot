@@ -4,7 +4,5 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             primaryKey: true,
         }
-    }, {
-        timestamps: false
     });
 };

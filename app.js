@@ -2,8 +2,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 const fs = require('fs');
-const { Users, Sounds } = require('./managers/db');
-const { Op } = require('sequelize');
 const { prefix, default_cd } = require('./config.json');
 
 client.commands = new Discord.Collection();
@@ -17,31 +15,7 @@ process.on('unhandledRejection', error => console.error(`Uncaught Promise Reject
 
 const cooldowns = new Discord.Collection();
 
-// const currency = new Discord.Collection();
-// Reflect.defineProperty(currency, 'add', {
-//     value: async function add(id, amount) {
-//         const user = currency.get(id);
-//         if (user) {
-//             user.balance += Number(amount);
-//             return user.save();
-//         }
-        
-//         const newUser = await Users.create({ user_id: id, balance: amount });
-//         currency.set(id, newUser);
-//         return newUser;
-//     }
-// });
-
-// Reflect.defineProperty(currency, 'getBalance', {
-//     value: function getBalance(id) {
-//         const user = currency.get(id);
-//         return user ? user.balance : 0;
-//     }
-// });
-
 client.on('ready', async () => {
-    // const storedBalances = await Users.findAll();
-    // storedBalances.forEach(b => currency.set(b.user_id, b));
     console.log(`Connected! Logged in as: ${client.user.tag}`);
 });
 
@@ -49,12 +23,8 @@ client.on('message', async message => {
     if (!message.content.startsWith(prefix) || message.author.bot) 
     return;
     
-    // currency.add(message.author.id, 1);
-
-    const messageContent = message.content.toLowerCase();
-
-    const args = messageContent.slice(prefix.length).split(/ +/);
-    const commandName = args.shift();
+    const args = message.content.slice(prefix.length).split(/ +/);
+    const commandName = args.shift().toLowerCase();
 
     if (client.commands.has(commandName)) {
         const command = client.commands.get(commandName);
