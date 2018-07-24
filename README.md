@@ -14,3 +14,6 @@ Future Enhancements:
 </ul>
 
 This is a work in progress, and my first real foray into Node.js programming and Discord bots.
+
+# License
+See the <a href="/mikeheiberger/get-hype-bot/master/LICENSE.md">LICENSE</a> file for license rights and limitations (MIT).
