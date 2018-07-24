@@ -14,8 +14,9 @@
     "discord.js": "^11.3.2",
     "ffmpeg-binaries": "^4.0.0",
     "node-opus": "^0.3.0",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
     "sequelize": "^4.38.0",
-    "sqlite3": "^4.0.2",
     "ytdl-core": "^0.20.4"
   }
 }
