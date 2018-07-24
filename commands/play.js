@@ -1,5 +1,5 @@
 const audioManager = require('../managers/audioManager');
-const sounds = require('../sounds.json');
+const { Users, Sounds } = require('../managers/db');
 
 module.exports = {
     name: 'play',
@@ -7,22 +7,27 @@ module.exports = {
     cooldown: 30,
     args: true,
     usage: '<songname>',
-    execute(message, args) {
+    async execute(message, args) {
         if (!message.guild) return;
 
         if (!args) return;
 
         const songname = args[0];
 
-        const song = sounds[songname];
-        if (!song || !song.link) return;
+        const song = await Sounds.findOne({ 
+            where: { name: songname } 
+        });  
+
+        if (!song || !song.link) {
+            return message.reply('that song hasn\'t been added yet');
+        }
 
         if (message.member.voiceChannel) {
             message.member.voiceChannel.join()
                 .then(connection => audioManager.playStream(connection, song))
                 .catch(console.error);
         } else {
-            message.channel.reply('you need to join a voice channel first');
+            message.reply('you need to join a voice channel first');
         }
     }
 }
