@@ -1,13 +1,13 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize("postgresql://postgres:miy@motoS120@localhost:5432/get-hype-bot", {
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres'
 });
 
 sequelize.import('models/users');
 const sounds = sequelize.import('models/sounds');
 
-const force = process.argv.includes('--force') || process.argv.includes('-f');
+const force = true; // process.argv.includes('--force') || process.argv.includes('-f');
 
 sequelize.sync({ force }).then(async () => {
     const startingSounds = [
