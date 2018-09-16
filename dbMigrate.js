@@ -18,12 +18,12 @@ sequelize.sync({ force }).then(async () => {
         for (let i = 0; i < sounds.length; i++) {
             const currentSound = sounds[i];
             let startTime = currentSound.start;
-            console.log(`\nMigrating : ${currentSound.name}\n`);
+            console.log(`Migrating : ${currentSound.name}`);
             if (currentSound.start) {
-                console.log(`Old start sime: ${startTime}\n`);
+                console.log(`Old start sime: ${startTime}`);
                 // Slicing off the s on this to make this an int for the new playback duration method
                 startTime = currentSound.start.slice(0, -1);
-                console.log(`New start time: ${startTime}\n`);
+                console.log(`New start time: ${startTime}`);
             }
 
             migratedSounds.push(
