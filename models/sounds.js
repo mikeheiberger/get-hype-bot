@@ -14,15 +14,12 @@ module.exports = (sequelize, DataTypes) => {
             default: -1
         },
         start: {
-            type: DataTypes.INTEGER,
-            default: 0
+            type: DataTypes.STRING,
+            allowNull: true
         },
         volume: {
             type: DataTypes.INTEGER,
             default: 1,
-        },
-        server: {
-            type: DataTypes.STRING
         }
     });
 };
