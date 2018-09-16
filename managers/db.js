@@ -6,5 +6,6 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 
 const Users = sequelize.import('../models/users');
 const Sounds = sequelize.import('../models/sounds');
+const SoundsNew = sequelize.import('../models/sounds_new');
 
 module.exports = { Users, Sounds };

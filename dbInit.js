@@ -5,7 +5,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 });
 
 sequelize.import('models/users');
-const sounds = sequelize.import('models/sounds');
+const sounds = sequelize.import('models/sounds_new');
 
 const force = true; // process.argv.includes('--force') || process.argv.includes('-f');
 
