@@ -5,7 +5,6 @@ let dispatcher;
 module.exports = {
     playStream(connection, song) {
         this.stop();
-
         
         const stream = ytdl(song.link,  { format: 'audioonly' });
         dispatcher = connection.playStream(stream, {

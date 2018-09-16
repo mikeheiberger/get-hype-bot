@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         volume: {
             type: DataTypes.INTEGER,
             default: 1,
+        },
+        server: {
+            type: DataTypes.STRING
         }
     });
 };
