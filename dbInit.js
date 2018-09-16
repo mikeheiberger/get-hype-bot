@@ -6,7 +6,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 
 sequelize.import('models/users');
 const sounds = sequelize.import('models/sounds');
-const sounds_new = sequelize.import('models/sounds_new');
+sequelize.import('models/sounds_new');
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
@@ -22,7 +22,6 @@ sequelize.sync({ force }).then(async () => {
         sounds.upsert({ name: 'goddamn', link: "https://www.youtube.com/watch?v=PTqtrGBYpxQ", volume: 1 }),
         sounds.upsert({ name: 'tryin', link: "https://www.youtube.com/watch?v=hMgHZ5dy918", start: '55s', duration: 4, volume: 1 }),
         sounds.upsert({ name: 'werewolf', link: "https://www.youtube.com/watch?v=6gCj62KHG0g", start: '15s', duration: 8 }),
-        sounds_new.upsert({ name: 'werewolf', link: "https://www.youtube.com/watch?v=6gCj62KHG0g", start: 15, duration: 8 }),
     ];
     await Promise.all(startingSounds);
     console.log('Database synced');
