@@ -8,4 +8,4 @@ const Users = sequelize.import('../models/users');
 const Sounds = sequelize.import('../models/sounds');
 const SoundsNew = sequelize.import('../models/sounds_new');
 
-module.exports = { Users, Sounds };
+module.exports = { Users, Sounds, SoundsNew };
