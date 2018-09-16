@@ -10,7 +10,7 @@ const sounds_new = sequelize.import('models/sounds_new');
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
-sequelize.sync({ force }).then(() => {
+sequelize.sync({ force }).then(async () => {
     const startingSounds = [
         sounds.upsert({ name: 'scatman', link:  "https://www.youtube.com/watch?v=Hy8kmNEo1i8", duration: 15 }),
         sounds.upsert({ name: 'scatmansworld', link: "https://www.youtube.com/watch?v=7neipvZ_H0c", duration: 18 }),
