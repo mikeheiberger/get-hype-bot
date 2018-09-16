@@ -1,4 +1,4 @@
-const { Users, Sounds } = require('../managers/db');
+const { Users, SoundsNew } = require('../managers/db');
 
 module.exports = {
     name: 'remove',
@@ -11,8 +11,13 @@ module.exports = {
 
         const songName = args[0];
 
-        const rowsRemoved = await Sounds.destroy({
-            where: { name: songName }
+        const rowsRemoved = await SoundsNew.destroy({
+            where: { 
+                $and: [
+                    { name: songName },
+                    { server: message.guild.id }
+                ]
+            }
         });
         
         if (rowsRemoved === 0) {

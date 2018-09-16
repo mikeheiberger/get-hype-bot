@@ -1,5 +1,5 @@
 const audioManager = require('../managers/audioManager');
-const { Users, Sounds } = require('../managers/db');
+const { Users, SoundsNew } = require('../managers/db');
 
 module.exports = {
     name: 'play',
@@ -14,7 +14,7 @@ module.exports = {
 
         const songname = args[0].toLowerCase();
 
-        const song = await Sounds.findOne({ 
+        const song = await SoundsNew.findOne({ 
             where: { name: songname } 
         });  
 

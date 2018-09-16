@@ -1,4 +1,4 @@
-const { Users, Sounds } = require('../managers/db');
+const { Users, SoundsNew } = require('../managers/db');
 const { prefix } = require('../config.json');
 
 module.exports = {
@@ -15,19 +15,19 @@ module.exports = {
             return message.reply(`Please try again with the following usage:\n${prefix}add ${usage}`);
         }
 
-        // Check for existing song
+        // TODO: Check for existing song
 
         const [ argName, argLink, argStart, argDuration, argVolume ] = args;
-        const fixedStart = argStart ? `${argStart}s` : null;
         const argNameLower = argName.toLowerCase();
         const clampedVolume = Math.max(0, Math.min(1, argVolume));
 
-        return await Sounds.create({
+        return await SoundsNew.create({
             name: argNameLower,
             link: argLink,
             duration: argDuration,
-            start: fixedStart,
-            volume: clampedVolume
+            start: argStart,
+            volume: clampedVolume,
+            server: message.guild.id
         });
     }
 };

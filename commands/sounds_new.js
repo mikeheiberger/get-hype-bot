@@ -6,6 +6,12 @@ module.exports = {
     cooldown: 30,
     async execute(message, args) {
         const sounds = await SoundsNew.findAll({
+            where: {
+                $or: [
+                    { server: message.guild.id },
+                    { server: null }
+                ]
+            },
             attributes: ['name']
         });
 

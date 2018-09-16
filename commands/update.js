@@ -1,4 +1,4 @@
-const { Users, Sounds } = require('../managers/db');
+const { Users, SoundsNew } = require('../managers/db');
 const { prefix } = require('../config.json');
 
 module.exports = {
@@ -16,12 +16,16 @@ module.exports = {
         }
 
         const [ argName, argLink, argStart, argDuration, argVolume ] = args;
-        const fixedStart = argStart ? `${argStart}s` : null;
         const argNameLower = argName.toLowerCase();
         const clampedVolume = Math.max(0, Math.min(1, argVolume));
 
-        const sound = await Sounds.findOne({
-            where: { name: argNameLower }
+        const sound = await SoundsNew.findOne({
+            where: { 
+                $and: [
+                    { name: argNameLower },
+                    { server: message.guild.id }
+                ]
+            }
         });
 
         if (!sound) {
@@ -31,7 +35,7 @@ module.exports = {
         return await sound.update({
             link: argLink,
             duration: argDuration,
-            start: fixedStart,
+            start: argStart,
             volume: clampedVolume
         });
     }

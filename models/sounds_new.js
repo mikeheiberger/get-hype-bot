@@ -22,7 +22,9 @@ module.exports = (sequelize, DataTypes) => {
             default: 1,
         },
         server: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: true,
+            default: null
         }
     });
 };
